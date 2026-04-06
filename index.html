@@ -44,17 +44,26 @@ body{background:#0d0f12;color:#e0e4ec;font-family:Barlow,system-ui,sans-serif;mi
 .btn:active{background:#ea6c0a;transform:scale(.98)}
 .btn-red{background:transparent;border:1px solid #7f1d1d;color:#f87171}
 .btn-red:active{background:#1a0f0f}
+.btn-green{background:#15803d;color:#fff;border:none}
+.btn-green:active{background:#166534}
 .btn-sm{padding:7px 14px;font-size:11px;letter-spacing:1px;border-radius:6px;width:auto;display:inline-block}
 .err{background:#1a0f0f;border:1px solid #3a1a1a;border-radius:8px;padding:11px 15px;color:#f87171;font-size:13px;width:100%;max-width:480px;margin-top:10px;font-family:'Share Tech Mono',monospace}
 .top-bar{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:480px;margin-bottom:14px}
 .mc{font-family:'Share Tech Mono',monospace;font-size:11px;color:#64748b;letter-spacing:1px}
 .log-list{width:100%;max-width:480px;display:flex;flex-direction:column;gap:10px}
-.log-card{background:#161a21;border:1px solid #f97316;border-radius:12px;overflow:hidden}
+.log-card{background:#161a21;border:1px solid #f97316;border-radius:12px;overflow:hidden;transition:border-color .3s}
 .log-card.noted{border-color:#4b5563;opacity:.78}
+.log-card.done{border-color:#15803d;animation:pulse-green 1.5s ease-in-out infinite}
+@keyframes pulse-green{0%,100%{box-shadow:0 0 0 0 rgba(21,128,61,0)}50%{box-shadow:0 0 0 4px rgba(21,128,61,.35)}}
 .log-head{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;cursor:pointer;background:#161a21}
 .log-mid{font-family:'Share Tech Mono',monospace;font-size:15px;font-weight:700;color:#f97316;letter-spacing:1px}
-.log-eta{font-family:'Share Tech Mono',monospace;font-size:13px;color:#4ade80}
+.log-eta{font-family:'Share Tech Mono',monospace;font-size:12px;color:#4ade80}
 .log-eta.dim{color:#64748b}
+/* Countdown */
+.countdown{font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;letter-spacing:1px;padding:3px 8px;border-radius:6px;background:#0d1a0d;border:1px solid #1a3a1a;color:#4ade80}
+.countdown.urgent{background:#1a0d0d;border-color:#3a1a1a;color:#f87171;animation:blink .8s step-start infinite}
+.countdown.done{background:#0d1a10;border-color:#15803d;color:#4ade80}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
 .chev{font-size:11px;color:#64748b;margin-left:7px;display:inline-block;transition:transform .2s}
 .chev.open{transform:rotate(180deg)}
 .log-body{padding:0 15px 15px}
@@ -80,6 +89,8 @@ body{background:#0d0f12;color:#e0e4ec;font-family:Barlow,system-ui,sans-serif;mi
 .sval{font-family:'Share Tech Mono',monospace;font-size:15px;color:#a7f3c0}
 .sunit{font-size:10px;color:#4b7a5a;margin-left:2px}
 .empty{text-align:center;color:#3d4555;font-family:'Share Tech Mono',monospace;font-size:13px;margin-top:8px;line-height:1.9}
+.finish-banner{margin-top:14px;padding:14px;background:#0d1a10;border:1px solid #15803d;border-radius:10px;text-align:center}
+.finish-banner p{font-family:'Share Tech Mono',monospace;font-size:12px;color:#4ade80;margin-bottom:10px;letter-spacing:.5px}
 /* Pallet */
 .pal-res{background:#0f1520;border:1px solid #1a2a3a;border-radius:12px;padding:22px;width:100%;max-width:480px;margin-top:14px}
 .pal-main{text-align:center;margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid #1a2a3a}
@@ -91,6 +102,30 @@ body{background:#0d0f12;color:#e0e4ec;font-family:Barlow,system-ui,sans-serif;mi
 .pslbl{font-size:10px;font-weight:600;color:#3a5a7a;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
 .psval{font-family:'Share Tech Mono',monospace;font-size:15px;color:#93c5fd}
 .remnote{margin-top:11px;background:#0d1520;border:1px solid #1a3050;border-radius:8px;padding:10px 13px;font-family:'Share Tech Mono',monospace;font-size:12px;color:#7dd3fc;text-align:center}
+
+/* Regrind log */
+.rg-log-card{background:#0f1a1a;border:1px solid #134e4a;border-radius:10px;padding:14px;margin-bottom:8px}
+.rg-log-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.rg-log-id{font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;color:#2dd4bf;letter-spacing:1px}
+.rg-log-pct{font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700;color:#2dd4bf}
+.rg-log-pct span{font-size:12px;color:#4b8a85;margin-left:2px}
+.rg-log-meta{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+.rg-log-item{background:#0d1212;border:1px solid #134e4a;border-radius:6px;padding:8px}
+.rg-log-lbl{font-size:10px;font-weight:600;color:#4b8a85;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.rg-log-val{font-family:'Share Tech Mono',monospace;font-size:13px;color:#a7f3c0}
+.rg-log-formula{font-family:'Share Tech Mono',monospace;font-size:10px;color:#4b8a85;text-align:center;padding-top:6px;border-top:1px solid #134e4a}
+.rg-log-time{font-family:'Share Tech Mono',monospace;font-size:10px;color:#4b5563}
+.pin-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:100}
+.pin-box{background:#161a21;border:1px solid #232830;border-radius:16px;padding:28px 24px;width:90%;max-width:340px;text-align:center}
+.pin-title{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:3px;color:#f97316;text-transform:uppercase;margin-bottom:6px}
+.pin-sub{font-size:13px;color:#64748b;margin-bottom:20px}
+.pin-input{width:100%;background:#0d0f12;border:1px solid #2d3340;border-radius:8px;padding:12px;font-family:'Share Tech Mono',monospace;font-size:22px;color:#e0e4ec;outline:none;text-align:center;letter-spacing:6px;-webkit-appearance:none;margin-bottom:12px}
+.pin-input:focus{border-color:#f97316}
+.pin-err{font-family:'Share Tech Mono',monospace;font-size:12px;color:#f87171;margin-bottom:12px;min-height:18px}
+.rg-topbar{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:480px;margin-bottom:12px}
+.rg-count{font-family:'Share Tech Mono',monospace;font-size:11px;color:#64748b;letter-spacing:1px}
+.export-btn{background:transparent;border:1px solid #134e4a;color:#2dd4bf;font-family:Barlow,sans-serif;font-size:11px;font-weight:600;letter-spacing:1px;padding:6px 12px;border-radius:6px;cursor:pointer}
+.export-btn:active{background:#0f1a1a}
 /* Regrind */
 .rg-res{background:#0f1a1a;border:1px solid #134e4a;border-radius:12px;padding:28px;width:100%;max-width:480px;margin-top:14px;text-align:center}
 .rg-lbl{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:3px;color:#2dd4bf;text-transform:uppercase;margin-bottom:12px}
@@ -108,24 +143,6 @@ const { useState, useEffect } = React;
 const HOURS   = Array.from({length:24},(_,i)=>String(i).padStart(2,'0'));
 const MINUTES = Array.from({length:60},(_,i)=>String(i).padStart(2,'0'));
 
-function TimePicker({value, onChange}) {
-  const [h,m] = (value||':').split(':');
-  return (
-    <div className="time-row">
-      <select value={h||''} onChange={e=>onChange(`${e.target.value}:${m||'00'}`)}>
-        <option value="" disabled>HH</option>
-        {HOURS.map(hh=><option key={hh} value={hh}>{hh}</option>)}
-      </select>
-      <span className="time-colon">:</span>
-      <select value={m||''} onChange={e=>onChange(`${h||'00'}:${e.target.value}`)}>
-        <option value="" disabled>MM</option>
-        {MINUTES.map(mm=><option key={mm} value={mm}>{mm}</option>)}
-      </select>
-      <span className={`time-preview ${h&&m?'set':''}`}>{h&&m?`${h}:${m}`:'select'}</span>
-    </div>
-  );
-}
-
 function timeToSec(str) {
   if(!str) return null;
   const [h,m] = str.split(':').map(Number);
@@ -134,6 +151,11 @@ function timeToSec(str) {
 }
 function secTo24(s) {
   s=((s%86400)+86400)%86400;
+  const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sc=Math.floor(s%60);
+  return [h,m,sc].map(x=>String(x).padStart(2,'0')).join(':');
+}
+function fmtCountdown(s) {
+  if(s<=0) return '00:00:00';
   const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sc=Math.floor(s%60);
   return [h,m,sc].map(x=>String(x).padStart(2,'0')).join(':');
 }
@@ -162,24 +184,50 @@ function computeETA(startSec,startBoxes,nowSec,curBoxes) {
   const rate=produced/elapsed;
   const ttf=curBoxes/rate;
   const fin=nowSec+ttf;
-  return {finishTime:secTo24(fin),rate:rate*3600,ttf,overnight:fin>=86400};
+  return {finishSec:((fin%86400)+86400)%86400, finishTime:secTo24(fin), rate:rate*3600, ttf, overnight:fin>=86400};
 }
 
-const SK='prod_logs_v2';
+const SK='prod_logs_v3';
 function loadLogs(){try{const r=localStorage.getItem(SK);return r?JSON.parse(r):[]}catch{return[]}}
 function saveLogs(l){try{localStorage.setItem(SK,JSON.stringify(l))}catch{}}
 
+/* ── Countdown component — isolated so only it re-renders every second ── */
+function Countdown({finishSec}) {
+  const [remaining, setRemaining] = useState(()=>{
+    const diff = finishSec - getNowSec();
+    return diff < 0 ? diff + 86400 : diff;
+  });
+
+  useEffect(()=>{
+    const t=setInterval(()=>{
+      const diff = finishSec - getNowSec();
+      // handle midnight rollover: if diff suddenly large and negative, it crossed midnight
+      const adjusted = diff < -3600 ? diff + 86400 : diff;
+      setRemaining(adjusted);
+    },1000);
+    return ()=>clearInterval(t);
+  },[finishSec]);
+
+  const isDone = remaining <= 0;
+  const isUrgent = remaining > 0 && remaining <= 300; // last 5 min
+
+  return (
+    <span className={`countdown${isDone?' done':isUrgent?' urgent':''}`}>
+      {isDone ? '✓ 00:00:00' : fmtCountdown(remaining)}
+    </span>
+  );
+}
+
 /* ── ETA Tab ── */
 function ETATab() {
-  const [logs,setLogs]           = useState(loadLogs);
-  const [nowDisplay,setNow]      = useState(getNowDisplay);
-  const [nowSec,setNowSec]       = useState(getNowSec);
-  const [expanded,setExpanded]   = useState(null);
+  const [logs,setLogs]             = useState(loadLogs);
+  const [nowDisplay,setNow]        = useState(getNowDisplay);
+  const [nowSec,setNowSec]         = useState(getNowSec);
+  const [expanded,setExpanded]     = useState(null);
   const [newMachine,setNewMachine] = useState('');
-  const [newTime1,setNewTime1]   = useState('');
-  const [newBoxes1,setNewBoxes1] = useState('');
-  const [formErr,setFormErr]     = useState('');
-  const [updInputs,setUpdInputs] = useState({});
+  const [newBoxes1,setNewBoxes1]   = useState('');
+  const [formErr,setFormErr]       = useState('');
+  const [updInputs,setUpdInputs]   = useState({});
 
   useEffect(()=>{
     const t=setInterval(()=>{setNow(getNowDisplay());setNowSec(getNowSec());},1000);
@@ -192,23 +240,24 @@ function ETATab() {
     const mid=newMachine.trim().toUpperCase();
     if(!mid) return setFormErr('⚠ Enter a machine number / ID');
     if(logs.find(l=>l.machineId===mid)) return setFormErr('⚠ Machine ID already exists');
-    const t1=timeToSec(newTime1);
-    if(t1===null) return setFormErr('⚠ Select a time for Check 1');
     const b1=parseFloat(newBoxes1);
     if(isNaN(b1)||b1<=0) return setFormErr('⚠ Enter valid boxes remaining');
-    const entry={id:Date.now(),machineId:mid,startSec:t1,startBoxes:b1,
-      history:[{label:newTime1,boxes:b1,eta:null}],reason:null};
+    const now=getNowSec();
+    const label=getNowHHMM();
+    const entry={id:Date.now(),machineId:mid,startSec:now,startBoxes:b1,
+      history:[{label,boxes:b1,eta:null}],reason:null};
     setLogs(prev=>[entry,...prev]);
     setExpanded(entry.id);
-    setNewMachine(''); setNewTime1(''); setNewBoxes1('');
+    setNewMachine(''); setNewBoxes1('');
   }
 
   function doUpdate(id) {
     const val=parseFloat(updInputs[id]||'');
     if(isNaN(val)||val<0) return;
+    const now=getNowSec();
     setLogs(prev=>prev.map(log=>{
       if(log.id!==id) return log;
-      const eta=computeETA(log.startSec,log.startBoxes,nowSec,val);
+      const eta=computeETA(log.startSec,log.startBoxes,now,val);
       return {...log,history:[...log.history,{label:getNowHHMM(),boxes:val,eta}]};
     }));
     setUpdInputs(prev=>({...prev,[id]:''}));
@@ -219,6 +268,11 @@ function ETATab() {
       if(log.id!==id) return log;
       return {...log,reason:log.reason===r?null:r};
     }));
+  }
+
+  function removeLog(id) {
+    setLogs(prev=>prev.filter(l=>l.id!==id));
+    if(expanded===id) setExpanded(null);
   }
 
   function resetAll() {
@@ -249,12 +303,8 @@ function ETATab() {
           <input type="text" placeholder="e.g. MC-01 or Line 3" value={newMachine}
             onChange={e=>setNewMachine(e.target.value)} autoCapitalize="characters"/>
         </div>
-        <div className="field">
-          <label>Check 1 Time</label>
-          <TimePicker value={newTime1} onChange={setNewTime1}/>
-        </div>
         <div className="field" style={{marginBottom:0}}>
-          <label>Boxes Remaining at Check 1</label>
+          <label>Boxes Remaining <span style={{color:'#4b5563',fontWeight:400,textTransform:'none',fontSize:10}}>(time recorded automatically)</span></label>
           <input type="number" placeholder="e.g. 880" value={newBoxes1}
             onChange={e=>setNewBoxes1(e.target.value)} inputMode="numeric"/>
         </div>
@@ -274,25 +324,39 @@ function ETATab() {
         {logs.map(log=>{
           const eta=getLatestETA(log);
           const isOpen=expanded===log.id;
+          // compute whether countdown is done
+          const isDone = eta && (getNowSec() >= eta.finishSec ||
+            (eta.overnight && getNowSec() + 86400 >= eta.finishSec + 86400));
+
           return (
-            <div key={log.id} className={`log-card${log.reason?' noted':''}`}>
+            <div key={log.id} className={`log-card${log.reason?' noted':''}${isDone?' done':''}`}>
               <div className="log-head" onClick={()=>setExpanded(isOpen?null:log.id)}>
                 <div>
                   <div className="log-mid">{log.machineId}</div>
                   {log.reason && (
-                    <div className={`note-badge ${log.reason}`}>
+                    <div className={`note-badge ${log.reason}`} style={{marginTop:4}}>
                       {log.reason==='tool'?'🔧 Tool Change':'🔄 Material Change'}
                     </div>
                   )}
                 </div>
-                <div style={{display:'flex',alignItems:'center',gap:6}}>
-                  <span className={`log-eta${eta?'':' dim'}`}>{eta?eta.finishTime:'no ETA yet'}</span>
+                <div style={{display:'flex',flexDirection:'column',alignItems:'flex-end',gap:5}}>
+                  {eta
+                    ? <Countdown finishSec={eta.finishSec}/>
+                    : <span className="log-eta dim">no ETA yet</span>
+                  }
+                  {eta && <span className={`log-eta${eta?'':' dim'}`} style={{fontSize:11}}>{eta.finishTime}</span>}
                   <span className={`chev${isOpen?' open':''}`}>▼</span>
                 </div>
               </div>
 
               {isOpen && (
                 <div className="log-body">
+
+                  {/* Finish banner when countdown done */}
+                  {eta && (
+                    <FinishBanner finishSec={eta.finishSec} onRemove={()=>removeLog(log.id)}/>
+                  )}
+
                   <div style={{marginBottom:12}}>
                     <div style={{fontSize:11,fontWeight:600,color:'#64748b',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:6}}>Finish Reason (optional)</div>
                     <div className="reason-row">
@@ -324,7 +388,7 @@ function ETATab() {
                   {eta && (
                     <div className="stat-grid">
                       <div className="stat"><div className="slbl">Rate</div><div className="sval">{eta.rate.toFixed(1)}<span className="sunit">bx/hr</span></div></div>
-                      <div className="stat"><div className="slbl">Time Left</div><div className="sval">{fmtDur(eta.ttf)}</div></div>
+                      <div className="stat"><div className="slbl">Time Left</div><div className="sval">{fmtDur(Math.max(0,eta.ttf))}</div></div>
                     </div>
                   )}
                   {eta?.overnight && <div style={{marginTop:8,fontSize:12,color:'#f97316',fontFamily:"'Share Tech Mono',monospace"}}>⚠ Finishes past midnight</div>}
@@ -337,6 +401,28 @@ function ETATab() {
 
       {logs.length===0 && <div className="empty">No machines tracked yet.<br/>Add one above to start.</div>}
     </React.Fragment>
+  );
+}
+
+/* ── Finish Banner — shown inside card when countdown reaches 0 ── */
+function FinishBanner({finishSec, onRemove}) {
+  const [done, setDone] = useState(()=> getNowSec() >= finishSec);
+
+  useEffect(()=>{
+    if(done) return;
+    const t=setInterval(()=>{
+      if(getNowSec() >= finishSec) { setDone(true); clearInterval(t); }
+    },1000);
+    return ()=>clearInterval(t);
+  },[finishSec]);
+
+  if(!done) return null;
+
+  return (
+    <div className="finish-banner">
+      <p>✓ Production complete for this machine</p>
+      <button className="btn btn-green btn-sm" onClick={onRemove}>Mark as Finished &amp; Remove</button>
+    </div>
   );
 }
 
@@ -396,25 +482,111 @@ function PalletTab() {
 }
 
 /* ── Regrind Tab ── */
-function RegrindTab() {
-  const [sprue,setSprue] = useState('');
-  const [parts,setParts] = useState('');
-  const [result,setResult] = useState(null);
-  const [error,setError]   = useState('');
+const RG_SK   = 'regrind_logs_v1';
+const RG_HASH = btoa('22222'); // simple obfuscation — not cryptographic
 
-  function calculate() {
-    setResult(null); setError('');
-    const s=parseFloat(sprue), p=parseFloat(parts);
+function loadRgLogs(){try{const r=localStorage.getItem(RG_SK);return r?JSON.parse(r):[]}catch{return[]}}
+function saveRgLogs(l){try{localStorage.setItem(RG_SK,JSON.stringify(l))}catch{}}
+
+function PinOverlay({onUnlock,onCancel}) {
+  const [pin,setPin]   = useState('');
+  const [err,setErr]   = useState('');
+  function check() {
+    if(btoa(pin)===RG_HASH){ onUnlock(); }
+    else{ setErr('Incorrect password'); setPin(''); }
+  }
+  return (
+    <div className="pin-overlay">
+      <div className="pin-box">
+        <div className="pin-title">Regrind Log</div>
+        <div className="pin-sub">Enter password to view logs</div>
+        <input className="pin-input" type="password" placeholder="•••••" value={pin}
+          onChange={e=>setPin(e.target.value)}
+          onKeyDown={e=>e.key==='Enter'&&check()} autoFocus/>
+        <div className="pin-err">{err}</div>
+        <button className="btn" style={{marginBottom:10}} onClick={check}>Unlock</button>
+        <button className="btn btn-red btn-sm" style={{margin:'0 auto'}} onClick={onCancel}>Cancel</button>
+      </div>
+    </div>
+  );
+}
+
+function RegrindTab() {
+  const [machineId,setMachineId] = useState('');
+  const [productCode,setProductCode] = useState('');
+  const [sprue,setSprue]   = useState('');
+  const [parts,setParts]   = useState('');
+  const [error,setError]   = useState('');
+  const [logs,setLogs]     = useState(loadRgLogs);
+  const [showLog,setShowLog]   = useState(false);
+  const [unlocked,setUnlocked] = useState(false);
+  const [showPin,setShowPin]   = useState(false);
+
+  function saveEntry() {
+    setError('');
+    const mid = machineId.trim().toUpperCase();
+    const pc  = productCode.trim().toUpperCase();
+    const s   = parseFloat(sprue);
+    const p   = parseFloat(parts);
+    if(!mid)           return setError('⚠ Enter a machine ID');
+    if(!pc)            return setError('⚠ Enter a product code');
     if(isNaN(s)||s<=0) return setError('⚠ Enter a valid sprue weight');
     if(isNaN(p)||p<=0) return setError('⚠ Enter a valid parts weight');
     const pct = (s/(s+p))*100;
-    setResult({pct:pct.toFixed(1), s, p, total:(s+p).toFixed(1)});
+    const now = new Date();
+    const timestamp = [now.getDate(),now.getMonth()+1,now.getFullYear()].map(x=>String(x).padStart(2,'0')).join('/') +
+      ' ' + [now.getHours(),now.getMinutes()].map(x=>String(x).padStart(2,'0')).join(':');
+    const entry = {id:Date.now(), machineId:mid, productCode:pc, sprue:s, parts:p,
+      total:parseFloat((s+p).toFixed(2)), pct:pct.toFixed(1), timestamp};
+    const updated = [entry,...logs];
+    setLogs(updated); saveRgLogs(updated);
+    setMachineId(''); setProductCode(''); setSprue(''); setParts('');
+  }
+
+  function exportCSV() {
+    const header = 'Timestamp,Machine ID,Product Code,Sprue (g),Parts (g),Total (g),Regrind %\n';
+    const rows = logs.map(l=>
+      `${l.timestamp},${l.machineId},${l.productCode},${l.sprue},${l.parts},${l.total},${l.pct}%`
+    ).join('\n');
+    const blob = new Blob([header+rows],{type:'text/csv'});
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href=url; a.download='regrind-log.csv'; a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function deleteLog(id) {
+    if(!window.confirm('Delete this entry?')) return;
+    const updated = logs.filter(l=>l.id!==id);
+    setLogs(updated); saveRgLogs(updated);
+  }
+
+  function openLog() {
+    if(unlocked) setShowLog(true);
+    else setShowPin(true);
   }
 
   return (
     <React.Fragment>
+      {showPin && (
+        <PinOverlay
+          onUnlock={()=>{setUnlocked(true);setShowPin(false);setShowLog(true);}}
+          onCancel={()=>setShowPin(false)}
+        />
+      )}
+
       <div className="card">
-        <div className="sec">Inputs</div>
+        <div className="sec">New Entry</div>
+        <div className="field">
+          <label>Machine ID</label>
+          <input type="text" placeholder="e.g. MC-01" value={machineId}
+            onChange={e=>setMachineId(e.target.value)} autoCapitalize="characters"/>
+        </div>
+        <div className="field">
+          <label>Product Code</label>
+          <input type="text" placeholder="e.g. PRD-442" value={productCode}
+            onChange={e=>setProductCode(e.target.value)} autoCapitalize="characters"/>
+        </div>
         <div className="field">
           <label>Sprue Weight (grams)</label>
           <input type="number" placeholder="e.g. 12.5" value={sprue}
@@ -426,15 +598,48 @@ function RegrindTab() {
             onChange={e=>setParts(e.target.value)} inputMode="decimal" step="0.1"/>
         </div>
       </div>
-      <button className="btn" onClick={calculate}>Calculate Regrind %</button>
-      {error && <div className="err">{error}</div>}
-      {result && (
-        <div className="rg-res">
-          <div className="rg-lbl">Regrind Percentage</div>
-          <div className="rg-val">{result.pct}</div>
-          <div className="rg-unit">%</div>
-          <div className="rg-formula">{result.s}g ÷ ({result.s}g + {result.p}g) × 100</div>
-        </div>
+
+      <button className="btn" style={{marginBottom:10}} onClick={saveEntry}>Save Entry</button>
+      {error && <div className="err" style={{marginBottom:10}}>{error}</div>}
+
+      <button className="btn" style={{marginBottom:14,background:'#134e4a',maxWidth:480}} onClick={openLog}>
+        📋 View Log ({logs.length} entries)
+      </button>
+
+      {showLog && unlocked && (
+        <React.Fragment>
+          {logs.length>0 && (
+            <div className="rg-topbar">
+              <span className="rg-count">{logs.length} entr{logs.length!==1?'ies':'y'}</span>
+              <button className="export-btn" onClick={exportCSV}>⬇ Export CSV</button>
+            </div>
+          )}
+          {logs.length===0 && (
+            <div className="empty" style={{color:'#4b8a85'}}>No entries saved yet.</div>
+          )}
+          {logs.map(l=>(
+            <div className="rg-log-card" key={l.id}>
+              <div className="rg-log-header">
+                <div>
+                  <div className="rg-log-id">{l.machineId} · {l.productCode}</div>
+                  <div className="rg-log-time">{l.timestamp}</div>
+                </div>
+                <div style={{display:'flex',alignItems:'center',gap:10}}>
+                  <div className="rg-log-pct">{l.pct}<span>%</span></div>
+                  <button onClick={()=>deleteLog(l.id)}
+                    style={{background:'transparent',border:'none',color:'#7f1d1d',fontSize:16,cursor:'pointer',padding:'2px 6px'}}>✕</button>
+                </div>
+              </div>
+              <div className="rg-log-meta">
+                <div className="rg-log-item"><div className="rg-log-lbl">Sprue</div><div className="rg-log-val">{l.sprue}g</div></div>
+                <div className="rg-log-item"><div className="rg-log-lbl">Parts</div><div className="rg-log-val">{l.parts}g</div></div>
+                <div className="rg-log-item"><div className="rg-log-lbl">Total</div><div className="rg-log-val">{l.total}g</div></div>
+                <div className="rg-log-item"><div className="rg-log-lbl">Regrind</div><div className="rg-log-val">{l.pct}%</div></div>
+              </div>
+              <div className="rg-log-formula">{l.sprue}g ÷ ({l.sprue}g + {l.parts}g) × 100 = {l.pct}%</div>
+            </div>
+          ))}
+        </React.Fragment>
       )}
     </React.Fragment>
   );
