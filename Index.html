@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Production"/>
+<title>Production Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@400;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#0d0f12;color:#e0e4ec;font-family:Barlow,system-ui,sans-serif;min-height:100vh}
+.app{display:flex;flex-direction:column;align-items:center;padding:52px 16px 80px}
+.header{text-align:center;margin-bottom:22px}
+.header-label{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:4px;color:#f97316;text-transform:uppercase;margin-bottom:6px}
+.header h1{font-size:23px;font-weight:700;color:#f1f5f9}
+.tabs{display:flex;width:100%;max-width:480px;background:#161a21;border:1px solid #232830;border-radius:12px;padding:5px;margin-bottom:22px;gap:4px}
+.tab{flex:1;padding:8px 4px;border:none;border-radius:8px;background:transparent;color:#64748b;font-family:Barlow,sans-serif;font-size:12px;font-weight:600;cursor:pointer;text-align:center;transition:all .2s}
+.tab.active{background:#f97316;color:#fff}
+.tab-icon{display:block;font-size:14px;margin-bottom:2px}
+.card{background:#161a21;border:1px solid #232830;border-radius:12px;padding:20px;width:100%;max-width:480px;margin-bottom:14px}
+.dashed-card{background:#0f1318;border:1px dashed #2d3340;border-radius:12px;padding:20px;width:100%;max-width:480px;margin-bottom:14px}
+.sec{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:3px;color:#f97316;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.sec::after{content:'';flex:1;height:1px;background:#232830}
+.field{margin-bottom:13px}
+.field label{display:block;font-size:11px;font-weight:600;color:#94a3b8;letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px}
+.field input[type=number],.field input[type=text]{width:100%;background:#0d0f12;border:1px solid #2d3340;border-radius:8px;padding:10px 12px;font-family:'Share Tech Mono',monospace;font-size:15px;color:#e0e4ec;outline:none;-webkit-appearance:none;appearance:none}
+.field input:focus{border-color:#f97316;box-shadow:0 0 0 2px rgba(249,115,22,.1)}
+.time-row{display:flex;align-items:center;gap:6px;background:#0d0f12;border:1px solid #2d3340;border-radius:8px;padding:7px 12px}
+.time-row select{background:#1a1f28;border:1px solid #2d3340;border-radius:6px;outline:none;font-family:'Share Tech Mono',monospace;font-size:19px;color:#e0e4ec;-webkit-appearance:none;appearance:none;text-align:center;padding:3px 6px;min-width:50px}
+.time-row select option{background:#161a21;color:#e0e4ec}
+.time-colon{font-family:'Share Tech Mono',monospace;font-size:22px;color:#f97316;font-weight:700}
+.time-preview{font-family:'Share Tech Mono',monospace;font-size:11px;color:#3d4555;margin-left:auto}
+.time-preview.set{color:#f97316}
+.live-box{display:flex;align-items:center;justify-content:space-between;background:#0d0f12;border:1px solid #2d3340;border-radius:8px;padding:9px 12px}
+.live-val{font-family:'Share Tech Mono',monospace;font-size:20px;color:#e0e4ec;letter-spacing:2px}
+.live-badge{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#fff;background:#f97316;border-radius:4px;padding:3px 7px}
+.btn{width:100%;max-width:480px;padding:13px;background:#f97316;color:#fff;font-family:Barlow,sans-serif;font-size:14px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;border:none;border-radius:8px;cursor:pointer;display:block;transition:background .2s}
+.btn:active{background:#ea6c0a;transform:scale(.98)}
+.btn-red{background:transparent;border:1px solid #7f1d1d;color:#f87171}
+.btn-red:active{background:#1a0f0f}
+.btn-green{background:#15803d;color:#fff;border:none}
+.btn-green:active{background:#166534}
+.btn-sm{padding:7px 14px;font-size:11px;letter-spacing:1px;border-radius:6px;width:auto;display:inline-block}
+.err{background:#1a0f0f;border:1px solid #3a1a1a;border-radius:8px;padding:11px 15px;color:#f87171;font-size:13px;width:100%;max-width:480px;margin-top:10px;font-family:'Share Tech Mono',monospace}
+.top-bar{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:480px;margin-bottom:14px}
+.mc{font-family:'Share Tech Mono',monospace;font-size:11px;color:#64748b;letter-spacing:1px}
+.log-list{width:100%;max-width:480px;display:flex;flex-direction:column;gap:10px}
+.log-card{background:#161a21;border:1px solid #f97316;border-radius:12px;overflow:hidden;transition:border-color .3s}
+.log-card.noted{border-color:#4b5563;opacity:.78}
+.log-card.done{border-color:#15803d;animation:pulse-green 1.5s ease-in-out infinite}
+@keyframes pulse-green{0%,100%{box-shadow:0 0 0 0 rgba(21,128,61,0)}50%{box-shadow:0 0 0 4px rgba(21,128,61,.35)}}
+.log-head{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;cursor:pointer;background:#161a21}
+.log-mid{font-family:'Share Tech Mono',monospace;font-size:15px;font-weight:700;color:#f97316;letter-spacing:1px}
+.log-eta{font-family:'Share Tech Mono',monospace;font-size:12px;color:#4ade80}
+.log-eta.dim{color:#64748b}
+/* Countdown */
+.countdown{font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;letter-spacing:1px;padding:3px 8px;border-radius:6px;background:#0d1a0d;border:1px solid #1a3a1a;color:#4ade80}
+.countdown.urgent{background:#1a0d0d;border-color:#3a1a1a;color:#f87171;animation:blink .8s step-start infinite}
+.countdown.done{background:#0d1a10;border-color:#15803d;color:#4ade80}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+.chev{font-size:11px;color:#64748b;margin-left:7px;display:inline-block;transition:transform .2s}
+.chev.open{transform:rotate(180deg)}
+.log-body{padding:0 15px 15px}
+.note-badge{display:inline-flex;align-items:center;gap:4px;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;border-radius:20px;padding:3px 10px;margin-bottom:11px}
+.note-badge.tool{background:#1c1205;border:1px solid #854d0e;color:#fbbf24}
+.note-badge.material{background:#050d1a;border:1px solid #1e3a5f;color:#60a5fa}
+.reason-row{display:flex;gap:8px;margin-bottom:12px}
+.rbtn{flex:1;padding:8px;border-radius:8px;border:1px solid #2d3340;background:#0d0f12;color:#64748b;font-family:Barlow,sans-serif;font-size:12px;font-weight:600;cursor:pointer;text-align:center}
+.rbtn.tool.on{border-color:#854d0e;background:#1c1205;color:#fbbf24}
+.rbtn.material.on{border-color:#1e3a5f;background:#050d1a;color:#60a5fa}
+.upd-row{display:flex;gap:8px;align-items:center;margin-bottom:13px}
+.upd-row input{flex:1;background:#0d0f12;border:1px solid #2d3340;border-radius:8px;padding:10px 12px;font-family:'Share Tech Mono',monospace;font-size:15px;color:#e0e4ec;outline:none;-webkit-appearance:none}
+.upd-row input:focus{border-color:#f97316}
+.hist-hdr{display:grid;grid-template-columns:68px 1fr auto;gap:6px;font-size:10px;font-weight:600;color:#4b5563;text-transform:uppercase;letter-spacing:.5px;padding-bottom:5px;border-bottom:1px solid #232830;margin-bottom:2px}
+.hist-row{display:grid;grid-template-columns:68px 1fr auto;gap:6px;padding:7px 0;border-bottom:1px solid #1e232c;font-size:12px}
+.hist-row:last-child{border-bottom:none}
+.ht{font-family:'Share Tech Mono',monospace;color:#64748b}
+.hb{font-family:'Share Tech Mono',monospace;color:#e0e4ec}
+.he{font-family:'Share Tech Mono',monospace;color:#4ade80;text-align:right}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.stat{background:#0d0f12;border:1px solid #1a3a1a;border-radius:8px;padding:11px}
+.slbl{font-size:10px;font-weight:600;color:#4b7a5a;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.sval{font-family:'Share Tech Mono',monospace;font-size:15px;color:#a7f3c0}
+.sunit{font-size:10px;color:#4b7a5a;margin-left:2px}
+.empty{text-align:center;color:#3d4555;font-family:'Share Tech Mono',monospace;font-size:13px;margin-top:8px;line-height:1.9}
+.finish-banner{margin-top:14px;padding:14px;background:#0d1a10;border:1px solid #15803d;border-radius:10px;text-align:center}
+.finish-banner p{font-family:'Share Tech Mono',monospace;font-size:12px;color:#4ade80;margin-bottom:10px;letter-spacing:.5px}
+/* Pallet */
+.pal-res{background:#0f1520;border:1px solid #1a2a3a;border-radius:12px;padding:22px;width:100%;max-width:480px;margin-top:14px}
+.pal-main{text-align:center;margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid #1a2a3a}
+.plbl{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:3px;color:#60a5fa;text-transform:uppercase;margin-bottom:8px}
+.pval{font-family:'Share Tech Mono',monospace;font-size:58px;color:#60a5fa;line-height:1;margin-bottom:4px}
+.punit{font-size:13px;color:#4b6a8a}
+.pal-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pstat{background:#0d0f12;border:1px solid #1a2a3a;border-radius:8px;padding:11px}
+.pslbl{font-size:10px;font-weight:600;color:#3a5a7a;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.psval{font-family:'Share Tech Mono',monospace;font-size:15px;color:#93c5fd}
+.remnote{margin-top:11px;background:#0d1520;border:1px solid #1a3050;border-radius:8px;padding:10px 13px;font-family:'Share Tech Mono',monospace;font-size:12px;color:#7dd3fc;text-align:center}
+
+/* Regrind log */
+.rg-log-card{background:#0f1a1a;border:1px solid #134e4a;border-radius:10px;padding:14px;margin-bottom:8px}
+.rg-log-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.rg-log-id{font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;color:#2dd4bf;letter-spacing:1px}
+.rg-log-pct{font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700;color:#2dd4bf}
+.rg-log-pct span{font-size:12px;color:#4b8a85;margin-left:2px}
+.rg-log-meta{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+.rg-log-item{background:#0d1212;border:1px solid #134e4a;border-radius:6px;padding:8px}
+.rg-log-lbl{font-size:10px;font-weight:600;color:#4b8a85;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.rg-log-val{font-family:'Share Tech Mono',monospace;font-size:13px;color:#a7f3c0}
+.rg-log-formula{font-family:'Share Tech Mono',monospace;font-size:10px;color:#4b8a85;text-align:center;padding-top:6px;border-top:1px solid #134e4a}
+.rg-log-time{font-family:'Share Tech Mono',monospace;font-size:10px;color:#4b5563}
+.pin-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:100}
+.pin-box{background:#161a21;border:1px solid #232830;border-radius:16px;padding:28px 24px;width:90%;max-width:340px;text-align:center}
+.pin-title{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:3px;color:#f97316;text-transform:uppercase;margin-bottom:6px}
+.pin-sub{font-size:13px;color:#64748b;margin-bottom:20px}
+.pin-input{width:100%;background:#0d0f12;border:1px solid #2d3340;border-radius:8px;padding:12px;font-family:'Share Tech Mono',monospace;font-size:22px;color:#e0e4ec;outline:none;text-align:center;letter-spacing:6px;-webkit-appearance:none;margin-bottom:12px}
+.pin-input:focus{border-color:#f97316}
+.pin-err{font-family:'Share Tech Mono',monospace;font-size:12px;color:#f87171;margin-bottom:12px;min-height:18px}
+.rg-topbar{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:480px;margin-bottom:12px}
+.rg-count{font-family:'Share Tech Mono',monospace;font-size:11px;color:#64748b;letter-spacing:1px}
+.export-btn{background:transparent;border:1px solid #134e4a;color:#2dd4bf;font-family:Barlow,sans-serif;font-size:11px;font-weight:600;letter-spacing:1px;padding:6px 12px;border-radius:6px;cursor:pointer}
+.export-btn:active{background:#0f1a1a}
+/* Regrind */
+.rg-res{background:#0f1a1a;border:1px solid #134e4a;border-radius:12px;padding:28px;width:100%;max-width:480px;margin-top:14px;text-align:center}
+.rg-lbl{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:3px;color:#2dd4bf;text-transform:uppercase;margin-bottom:12px}
+.rg-val{font-family:'Share Tech Mono',monospace;font-size:80px;font-weight:400;color:#2dd4bf;line-height:1;margin-bottom:6px}
+.rg-unit{font-size:16px;color:#4b8a85;letter-spacing:1px;margin-bottom:14px}
+.rg-formula{font-family:'Share Tech Mono',monospace;font-size:11px;color:#4b8a85;letter-spacing:.5px}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+/* ── Helpers ── */
+const HOURS   = Array.from({length:24},(_,i)=>String(i).padStart(2,'0'));
+const MINUTES = Array.from({length:60},(_,i)=>String(i).padStart(2,'0'));
+
+function timeToSec(str) {
+  if(!str) return null;
+  const [h,m] = str.split(':').map(Number);
+  if(isNaN(h)||isNaN(m)) return null;
+  return h*3600+m*60;
+}
+function secTo24(s) {
+  s=((s%86400)+86400)%86400;
+  const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sc=Math.floor(s%60);
+  return [h,m,sc].map(x=>String(x).padStart(2,'0')).join(':');
+}
+function fmtCountdown(s) {
+  if(s<=0) return '00:00:00';
+  const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sc=Math.floor(s%60);
+  return [h,m,sc].map(x=>String(x).padStart(2,'0')).join(':');
+}
+function fmtDur(s) {
+  const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sc=Math.floor(s%60);
+  if(h>0) return `${h}h ${m}m ${sc}s`;
+  if(m>0) return `${m}m ${sc}s`;
+  return `${sc}s`;
+}
+function getNowHHMM() {
+  const n=new Date();
+  return `${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;
+}
+function getNowDisplay() {
+  const n=new Date();
+  return [n.getHours(),n.getMinutes(),n.getSeconds()].map(x=>String(x).padStart(2,'0')).join(':');
+}
+function getNowSec() {
+  const n=new Date(); return n.getHours()*3600+n.getMinutes()*60+n.getSeconds();
+}
+function computeETA(startSec,startBoxes,nowSec,curBoxes) {
+  let elapsed=nowSec-startSec;
+  if(elapsed<=0) elapsed+=86400;
+  const produced=startBoxes-curBoxes;
+  if(produced<=0) return null;
+  const rate=produced/elapsed;
+  const ttf=curBoxes/rate;
+  const fin=nowSec+ttf;
+  return {finishSec:((fin%86400)+86400)%86400, finishTime:secTo24(fin), rate:rate*3600, ttf, overnight:fin>=86400};
+}
+
+const SK='prod_logs_v3';
+function loadLogs(){try{const r=localStorage.getItem(SK);return r?JSON.parse(r):[]}catch{return[]}}
+function saveLogs(l){try{localStorage.setItem(SK,JSON.stringify(l))}catch{}}
+
+/* ── Countdown component — isolated so only it re-renders every second ── */
+function Countdown({finishSec}) {
+  const [remaining, setRemaining] = useState(()=>{
+    const diff = finishSec - getNowSec();
+    return diff < 0 ? diff + 86400 : diff;
+  });
+
+  useEffect(()=>{
+    const t=setInterval(()=>{
+      const diff = finishSec - getNowSec();
+      // handle midnight rollover: if diff suddenly large and negative, it crossed midnight
+      const adjusted = diff < -3600 ? diff + 86400 : diff;
+      setRemaining(adjusted);
+    },1000);
+    return ()=>clearInterval(t);
+  },[finishSec]);
+
+  const isDone = remaining <= 0;
+  const isUrgent = remaining > 0 && remaining <= 300; // last 5 min
+
+  return (
+    <span className={`countdown${isDone?' done':isUrgent?' urgent':''}`}>
+      {isDone ? '✓ 00:00:00' : fmtCountdown(remaining)}
+    </span>
+  );
+}
+
+/* ── ETA Tab ── */
+function ETATab() {
+  const [logs,setLogs]             = useState(loadLogs);
+  const [nowDisplay,setNow]        = useState(getNowDisplay);
+  const [nowSec,setNowSec]         = useState(getNowSec);
+  const [expanded,setExpanded]     = useState(null);
+  const [newMachine,setNewMachine] = useState('');
+  const [newBoxes1,setNewBoxes1]   = useState('');
+  const [formErr,setFormErr]       = useState('');
+  const [updInputs,setUpdInputs]   = useState({});
+
+  useEffect(()=>{
+    const t=setInterval(()=>{setNow(getNowDisplay());setNowSec(getNowSec());},1000);
+    return ()=>clearInterval(t);
+  },[]);
+  useEffect(()=>saveLogs(logs),[logs]);
+
+  function addMachine() {
+    setFormErr('');
+    const mid=newMachine.trim().toUpperCase();
+    if(!mid) return setFormErr('⚠ Enter a machine number / ID');
+    if(logs.find(l=>l.machineId===mid)) return setFormErr('⚠ Machine ID already exists');
+    const b1=parseFloat(newBoxes1);
+    if(isNaN(b1)||b1<=0) return setFormErr('⚠ Enter valid boxes remaining');
+    const now=getNowSec();
+    const label=getNowHHMM();
+    const entry={id:Date.now(),machineId:mid,startSec:now,startBoxes:b1,
+      history:[{label,boxes:b1,eta:null}],reason:null};
+    setLogs(prev=>[entry,...prev]);
+    setExpanded(entry.id);
+    setNewMachine(''); setNewBoxes1('');
+  }
+
+  function doUpdate(id) {
+    const val=parseFloat(updInputs[id]||'');
+    if(isNaN(val)||val<0) return;
+    const now=getNowSec();
+    setLogs(prev=>prev.map(log=>{
+      if(log.id!==id) return log;
+      const eta=computeETA(log.startSec,log.startBoxes,now,val);
+      return {...log,history:[...log.history,{label:getNowHHMM(),boxes:val,eta}]};
+    }));
+    setUpdInputs(prev=>({...prev,[id]:''}));
+  }
+
+  function setReason(id,r) {
+    setLogs(prev=>prev.map(log=>{
+      if(log.id!==id) return log;
+      return {...log,reason:log.reason===r?null:r};
+    }));
+  }
+
+  function removeLog(id) {
+    setLogs(prev=>prev.filter(l=>l.id!==id));
+    if(expanded===id) setExpanded(null);
+  }
+
+  function resetAll() {
+    if(!window.confirm('Reset all machine logs? This cannot be undone.')) return;
+    setLogs([]); setExpanded(null);
+  }
+
+  function getLatestETA(log) {
+    for(let i=log.history.length-1;i>=0;i--)
+      if(log.history[i].eta) return log.history[i].eta;
+    return null;
+  }
+
+  return (
+    <React.Fragment>
+      <div className="card" style={{marginBottom:14}}>
+        <div className="sec">Current Time</div>
+        <div className="live-box">
+          <span className="live-val">{nowDisplay}</span>
+          <span className="live-badge">live</span>
+        </div>
+      </div>
+
+      <div className="dashed-card">
+        <div className="sec">Add Machine</div>
+        <div className="field">
+          <label>Machine Number / ID</label>
+          <input type="text" placeholder="e.g. MC-01 or Line 3" value={newMachine}
+            onChange={e=>setNewMachine(e.target.value)} autoCapitalize="characters"/>
+        </div>
+        <div className="field" style={{marginBottom:0}}>
+          <label>Boxes Remaining <span style={{color:'#4b5563',fontWeight:400,textTransform:'none',fontSize:10}}>(time recorded automatically)</span></label>
+          <input type="number" placeholder="e.g. 880" value={newBoxes1}
+            onChange={e=>setNewBoxes1(e.target.value)} inputMode="numeric"/>
+        </div>
+      </div>
+
+      <button className="btn" style={{marginBottom:14}} onClick={addMachine}>+ Add Machine</button>
+      {formErr && <div className="err" style={{marginBottom:12}}>{formErr}</div>}
+
+      {logs.length>0 && (
+        <div className="top-bar">
+          <span className="mc">{logs.length} machine{logs.length!==1?'s':''} tracked</span>
+          <button className="btn btn-sm btn-red" onClick={resetAll}>Reset All</button>
+        </div>
+      )}
+
+      <div className="log-list">
+        {logs.map(log=>{
+          const eta=getLatestETA(log);
+          const isOpen=expanded===log.id;
+          // compute whether countdown is done
+          const isDone = eta && (getNowSec() >= eta.finishSec ||
+            (eta.overnight && getNowSec() + 86400 >= eta.finishSec + 86400));
+
+          return (
+            <div key={log.id} className={`log-card${log.reason?' noted':''}${isDone?' done':''}`}>
+              <div className="log-head" onClick={()=>setExpanded(isOpen?null:log.id)}>
+                <div>
+                  <div className="log-mid">{log.machineId}</div>
+                  {log.reason && (
+                    <div className={`note-badge ${log.reason}`} style={{marginTop:4}}>
+                      {log.reason==='tool'?'🔧 Tool Change':'🔄 Material Change'}
+                    </div>
+                  )}
+                </div>
+                <div style={{display:'flex',flexDirection:'column',alignItems:'flex-end',gap:5}}>
+                  {eta
+                    ? <Countdown finishSec={eta.finishSec}/>
+                    : <span className="log-eta dim">no ETA yet</span>
+                  }
+                  {eta && <span className={`log-eta${eta?'':' dim'}`} style={{fontSize:11}}>{eta.finishTime}</span>}
+                  <span className={`chev${isOpen?' open':''}`}>▼</span>
+                </div>
+              </div>
+
+              {isOpen && (
+                <div className="log-body">
+
+                  {/* Finish banner when countdown done */}
+                  {eta && (
+                    <FinishBanner finishSec={eta.finishSec} onRemove={()=>removeLog(log.id)}/>
+                  )}
+
+                  <div style={{marginBottom:12}}>
+                    <div style={{fontSize:11,fontWeight:600,color:'#64748b',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:6}}>Finish Reason (optional)</div>
+                    <div className="reason-row">
+                      <button className={`rbtn tool${log.reason==='tool'?' on':''}`} onClick={()=>setReason(log.id,'tool')}>🔧 Tool Change</button>
+                      <button className={`rbtn material${log.reason==='material'?' on':''}`} onClick={()=>setReason(log.id,'material')}>🔄 Material Change</button>
+                    </div>
+                  </div>
+
+                  <div style={{marginBottom:13}}>
+                    <div style={{fontSize:11,fontWeight:600,color:'#64748b',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:6}}>Update Boxes Remaining</div>
+                    <div className="upd-row">
+                      <input type="number" inputMode="numeric" placeholder="Current boxes remaining"
+                        value={updInputs[log.id]||''}
+                        onChange={e=>setUpdInputs(prev=>({...prev,[log.id]:e.target.value}))}
+                        onKeyDown={e=>e.key==='Enter'&&doUpdate(log.id)}/>
+                      <button className="btn btn-sm" style={{padding:'10px 16px'}} onClick={()=>doUpdate(log.id)}>Update</button>
+                    </div>
+                  </div>
+
+                  <div className="hist-hdr"><span>Time</span><span>Boxes Left</span><span>ETA</span></div>
+                  {[...log.history].reverse().map((h,i)=>(
+                    <div className="hist-row" key={i}>
+                      <span className="ht">{h.label}</span>
+                      <span className="hb">{h.boxes} boxes</span>
+                      <span className="he">{h.eta?h.eta.finishTime:'—'}</span>
+                    </div>
+                  ))}
+
+                  {eta && (
+                    <div className="stat-grid">
+                      <div className="stat"><div className="slbl">Rate</div><div className="sval">{eta.rate.toFixed(1)}<span className="sunit">bx/hr</span></div></div>
+                      <div className="stat"><div className="slbl">Time Left</div><div className="sval">{fmtDur(Math.max(0,eta.ttf))}</div></div>
+                    </div>
+                  )}
+                  {eta?.overnight && <div style={{marginTop:8,fontSize:12,color:'#f97316',fontFamily:"'Share Tech Mono',monospace"}}>⚠ Finishes past midnight</div>}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {logs.length===0 && <div className="empty">No machines tracked yet.<br/>Add one above to start.</div>}
+    </React.Fragment>
+  );
+}
+
+/* ── Finish Banner — shown inside card when countdown reaches 0 ── */
+function FinishBanner({finishSec, onRemove}) {
+  const [done, setDone] = useState(()=> getNowSec() >= finishSec);
+
+  useEffect(()=>{
+    if(done) return;
+    const t=setInterval(()=>{
+      if(getNowSec() >= finishSec) { setDone(true); clearInterval(t); }
+    },1000);
+    return ()=>clearInterval(t);
+  },[finishSec]);
+
+  if(!done) return null;
+
+  return (
+    <div className="finish-banner">
+      <p>✓ Production complete for this machine</p>
+      <button className="btn btn-green btn-sm" onClick={onRemove}>Mark as Finished &amp; Remove</button>
+    </div>
+  );
+}
+
+/* ── Pallet Tab ── */
+function PalletTab() {
+  const [ppb,setPpb]     = useState('');
+  const [tp,setTp]       = useState('');
+  const [result,setResult] = useState(null);
+  const [error,setError]   = useState('');
+
+  function calculate() {
+    setResult(null); setError('');
+    const p=parseFloat(ppb), t=parseFloat(tp);
+    if(isNaN(p)||p<=0) return setError('⚠ Enter a valid number of parts per box');
+    if(isNaN(t)||t<=0) return setError('⚠ Enter a valid total number of parts');
+    const full=Math.floor(t/p), rem=t%p, total=rem>0?full+1:full;
+    setResult({p,t,full,rem,total});
+  }
+
+  return (
+    <React.Fragment>
+      <div className="card">
+        <div className="sec">Inputs</div>
+        <div className="field">
+          <label>Parts per Box</label>
+          <input type="number" placeholder="e.g. 24" value={ppb} onChange={e=>setPpb(e.target.value)} inputMode="numeric"/>
+        </div>
+        <div className="field" style={{marginBottom:0}}>
+          <label>Total Parts on Pallet</label>
+          <input type="number" placeholder="e.g. 576" value={tp} onChange={e=>setTp(e.target.value)} inputMode="numeric"/>
+        </div>
+      </div>
+      <button className="btn" onClick={calculate}>Calculate Boxes Needed</button>
+      {error && <div className="err">{error}</div>}
+      {result && (
+        <div className="pal-res">
+          <div className="sec" style={{color:'#60a5fa'}}>Result</div>
+          <div className="pal-main">
+            <div className="plbl">Boxes to Make</div>
+            <div className="pval">{result.total}</div>
+            <div className="punit">boxes needed for this pallet</div>
+          </div>
+          <div className="pal-grid">
+            <div className="pstat"><div className="pslbl">Total Parts</div><div className="psval">{result.t}</div></div>
+            <div className="pstat"><div className="pslbl">Parts per Box</div><div className="psval">{result.p}</div></div>
+            <div className="pstat"><div className="pslbl">Full Boxes</div><div className="psval">{result.full}</div></div>
+            <div className="pstat"><div className="pslbl">Leftover Parts</div><div className="psval">{result.rem}</div></div>
+          </div>
+          {result.rem>0
+            ? <div className="remnote">⚠ Last box will have only {result.rem} part{result.rem>1?'s':''} (not full)</div>
+            : <div className="remnote" style={{color:'#4ade80',borderColor:'#1a3a1a'}}>✓ All {result.total} boxes will be completely full</div>
+          }
+        </div>
+      )}
+    </React.Fragment>
+  );
+}
+
+/* ── Regrind Tab ── */
+const RG_SK   = 'regrind_logs_v1';
+const RG_HASH = btoa('22222'); // simple obfuscation — not cryptographic
+
+function loadRgLogs(){try{const r=localStorage.getItem(RG_SK);return r?JSON.parse(r):[]}catch{return[]}}
+function saveRgLogs(l){try{localStorage.setItem(RG_SK,JSON.stringify(l))}catch{}}
+
+function PinOverlay({onUnlock,onCancel}) {
+  const [pin,setPin]   = useState('');
+  const [err,setErr]   = useState('');
+  function check() {
+    if(btoa(pin)===RG_HASH){ onUnlock(); }
+    else{ setErr('Incorrect password'); setPin(''); }
+  }
+  return (
+    <div className="pin-overlay">
+      <div className="pin-box">
+        <div className="pin-title">Regrind Log</div>
+        <div className="pin-sub">Enter password to view logs</div>
+        <input className="pin-input" type="password" placeholder="•••••" value={pin}
+          onChange={e=>setPin(e.target.value)}
+          onKeyDown={e=>e.key==='Enter'&&check()} autoFocus/>
+        <div className="pin-err">{err}</div>
+        <button className="btn" style={{marginBottom:10}} onClick={check}>Unlock</button>
+        <button className="btn btn-red btn-sm" style={{margin:'0 auto'}} onClick={onCancel}>Cancel</button>
+      </div>
+    </div>
+  );
+}
+
+function RegrindTab() {
+  const [machineId,setMachineId] = useState('');
+  const [productCode,setProductCode] = useState('');
+  const [sprue,setSprue]   = useState('');
+  const [parts,setParts]   = useState('');
+  const [error,setError]   = useState('');
+  const [logs,setLogs]     = useState(loadRgLogs);
+  const [showLog,setShowLog]   = useState(false);
+  const [unlocked,setUnlocked] = useState(false);
+  const [showPin,setShowPin]   = useState(false);
+
+  function saveEntry() {
+    setError('');
+    const mid = machineId.trim().toUpperCase();
+    const pc  = productCode.trim().toUpperCase();
+    const s   = parseFloat(sprue);
+    const p   = parseFloat(parts);
+    if(!mid)           return setError('⚠ Enter a machine ID');
+    if(!pc)            return setError('⚠ Enter a product code');
+    if(isNaN(s)||s<=0) return setError('⚠ Enter a valid sprue weight');
+    if(isNaN(p)||p<=0) return setError('⚠ Enter a valid parts weight');
+    const pct = (s/(s+p))*100;
+    const now = new Date();
+    const timestamp = [now.getDate(),now.getMonth()+1,now.getFullYear()].map(x=>String(x).padStart(2,'0')).join('/') +
+      ' ' + [now.getHours(),now.getMinutes()].map(x=>String(x).padStart(2,'0')).join(':');
+    const entry = {id:Date.now(), machineId:mid, productCode:pc, sprue:s, parts:p,
+      total:parseFloat((s+p).toFixed(2)), pct:pct.toFixed(1), timestamp};
+    const updated = [entry,...logs];
+    setLogs(updated); saveRgLogs(updated);
+    setMachineId(''); setProductCode(''); setSprue(''); setParts('');
+  }
+
+  function exportCSV() {
+    const header = 'Timestamp,Machine ID,Product Code,Sprue (g),Parts (g),Total (g),Regrind %\n';
+    const rows = logs.map(l=>
+      `${l.timestamp},${l.machineId},${l.productCode},${l.sprue},${l.parts},${l.total},${l.pct}%`
+    ).join('\n');
+    const blob = new Blob([header+rows],{type:'text/csv'});
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href=url; a.download='regrind-log.csv'; a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function deleteLog(id) {
+    if(!window.confirm('Delete this entry?')) return;
+    const updated = logs.filter(l=>l.id!==id);
+    setLogs(updated); saveRgLogs(updated);
+  }
+
+  function openLog() {
+    if(unlocked) setShowLog(true);
+    else setShowPin(true);
+  }
+
+  return (
+    <React.Fragment>
+      {showPin && (
+        <PinOverlay
+          onUnlock={()=>{setUnlocked(true);setShowPin(false);setShowLog(true);}}
+          onCancel={()=>setShowPin(false)}
+        />
+      )}
+
+      <div className="card">
+        <div className="sec">New Entry</div>
+        <div className="field">
+          <label>Machine ID</label>
+          <input type="text" placeholder="e.g. MC-01" value={machineId}
+            onChange={e=>setMachineId(e.target.value)} autoCapitalize="characters"/>
+        </div>
+        <div className="field">
+          <label>Product Code</label>
+          <input type="text" placeholder="e.g. PRD-442" value={productCode}
+            onChange={e=>setProductCode(e.target.value)} autoCapitalize="characters"/>
+        </div>
+        <div className="field">
+          <label>Sprue Weight (grams)</label>
+          <input type="number" placeholder="e.g. 12.5" value={sprue}
+            onChange={e=>setSprue(e.target.value)} inputMode="decimal" step="0.1"/>
+        </div>
+        <div className="field" style={{marginBottom:0}}>
+          <label>Parts Weight (grams)</label>
+          <input type="number" placeholder="e.g. 87.5" value={parts}
+            onChange={e=>setParts(e.target.value)} inputMode="decimal" step="0.1"/>
+        </div>
+      </div>
+
+      <button className="btn" style={{marginBottom:10}} onClick={saveEntry}>Save Entry</button>
+      {error && <div className="err" style={{marginBottom:10}}>{error}</div>}
+
+      <button className="btn" style={{marginBottom:14,background:'#134e4a',maxWidth:480}} onClick={openLog}>
+        📋 View Log ({logs.length} entries)
+      </button>
+
+      {showLog && unlocked && (
+        <React.Fragment>
+          {logs.length>0 && (
+            <div className="rg-topbar">
+              <span className="rg-count">{logs.length} entr{logs.length!==1?'ies':'y'}</span>
+              <button className="export-btn" onClick={exportCSV}>⬇ Export CSV</button>
+            </div>
+          )}
+          {logs.length===0 && (
+            <div className="empty" style={{color:'#4b8a85'}}>No entries saved yet.</div>
+          )}
+          {logs.map(l=>(
+            <div className="rg-log-card" key={l.id}>
+              <div className="rg-log-header">
+                <div>
+                  <div className="rg-log-id">{l.machineId} · {l.productCode}</div>
+                  <div className="rg-log-time">{l.timestamp}</div>
+                </div>
+                <div style={{display:'flex',alignItems:'center',gap:10}}>
+                  <div className="rg-log-pct">{l.pct}<span>%</span></div>
+                  <button onClick={()=>deleteLog(l.id)}
+                    style={{background:'transparent',border:'none',color:'#7f1d1d',fontSize:16,cursor:'pointer',padding:'2px 6px'}}>✕</button>
+                </div>
+              </div>
+              <div className="rg-log-meta">
+                <div className="rg-log-item"><div className="rg-log-lbl">Sprue</div><div className="rg-log-val">{l.sprue}g</div></div>
+                <div className="rg-log-item"><div className="rg-log-lbl">Parts</div><div className="rg-log-val">{l.parts}g</div></div>
+                <div className="rg-log-item"><div className="rg-log-lbl">Total</div><div className="rg-log-val">{l.total}g</div></div>
+                <div className="rg-log-item"><div className="rg-log-lbl">Regrind</div><div className="rg-log-val">{l.pct}%</div></div>
+              </div>
+              <div className="rg-log-formula">{l.sprue}g ÷ ({l.sprue}g + {l.parts}g) × 100 = {l.pct}%</div>
+            </div>
+          ))}
+        </React.Fragment>
+      )}
+    </React.Fragment>
+  );
+}
+
+/* ── Main App ── */
+function App() {
+  const [tab,setTab] = useState('eta');
+  return (
+    <div className="app">
+      <div className="header">
+        <div className="header-label">Factory Floor Tool</div>
+        <h1>Production Calculator</h1>
+      </div>
+      <div className="tabs">
+        <button className={`tab${tab==='eta'?' active':''}`} onClick={()=>setTab('eta')}>
+          <span className="tab-icon">⏱</span>ETA
+        </button>
+        <button className={`tab${tab==='pallet'?' active':''}`} onClick={()=>setTab('pallet')}>
+          <span className="tab-icon">📦</span>Pallet
+        </button>
+        <button className={`tab${tab==='regrind'?' active':''}`} onClick={()=>setTab('regrind')}>
+          <span className="tab-icon">♻️</span>Regrind
+        </button>
+      </div>
+      {tab==='eta'     && <ETATab/>}
+      {tab==='pallet'  && <PalletTab/>}
+      {tab==='regrind' && <RegrindTab/>}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
